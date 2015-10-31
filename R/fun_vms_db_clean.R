@@ -152,6 +152,11 @@ dH1 = function(x) return(-6*x^2 + 6*x)
 dH2 = function(x) return(3*x^2 - 4*x + 1)
 dH3 = function(x) return(3*x^2 - 2*x)
 
+# by Josh O'Brien on http://stackoverflow.com/questions/9186496/determining-utm-zone-to-convert-from-longitude-latitude
+long2UTM <- function(long) {
+  (floor((long + 180)/6) %% 60) + 1
+}
+
 # # Original spline basis
 # H0 = function(x) return((2*x^3)-(3*x^2)+1)
 # H1 = function(x) return(-(2*x^3)+(3*x^2)
@@ -268,68 +273,78 @@ recu_dep_RDS <- function(bat_all, xmin, xmax, ymin, ymax, the_db = "", max_siz =
         cur_rows <- which(as.numeric(rownames(bat_all)) >= xmin-0.1 & as.numeric(rownames(bat_all)) <= xmax+0.1)
         cur_cols <- which(as.numeric(colnames(bat_all)) >= ymin-0.1 & as.numeric(colnames(bat_all)) <= ymax+0.1)
         
-        bat_blo <- bat_all[cur_rows, cur_cols]
-        
-        xlon <- rep(as.numeric(rownames(bat_blo)),length(as.numeric(colnames(bat_blo))))
-        ylat <- rep(as.numeric(colnames(bat_blo)),each=length(as.numeric(rownames(bat_blo))))
-        zdep <- as.numeric(bat_blo)
-        
-        ##########
-        blues<-c("lightsteelblue4","lightsteelblue3","lightsteelblue2","lightsteelblue1")
-        ba_bl <- as.bathy(cbind(xlon, ylat, zdep))
-        plot(ba_bl,image=TRUE,land=TRUE,lwd=0.1,bpal=list(c(0,max(ba_bl),"grey"),c(min(ba_bl),0,blues)))
-        plot(ba_bl,deep=0,shallow=0,step=0,lwd=0.4,add=TRUE)
-        ##########
-        
-        #         plot(as.bathy(cbind(xlon, ylat, zdep)), image = T)
-        
-        points(deppoi[,"LON"], deppoi[,"LAT"], pch = 20, cex = 0.6, col = "firebrick")
-        
-        cat("  -  Calculating Spline...", sep = "")
-        SplineD <- o_Tps(cbind(xlon, ylat), zdep, lon.lat=TRUE)
-        #         cat(class(SplineD), "\n")
-        rm(bat_blo, zdep, xlon, ylat)
-        
-        cat(" Predicting depth...", sep = "")
-        if(nrow(deppoi)<= 10000){
-          dept <- as.numeric(predict(SplineD, deppoi[,c("LON","LAT")]))
-          dep_v <- as.data.frame(cbind(deppoi[,"rowid"], deppoi[,"I_NCEE"], dept))
-          sqldf("insert into p_depth select * from `dep_v`", dbname = the_db)
-          rm(dept, dep_v)
-          gc()
-        }else{
-          nPin <- ceiling(nrow(deppoi)/10000)
-          for(pi in 1:nPin)
-          {
-            cat(".", sep = "")
-            r1 <- 10000*(pi-1)+1
-            r2 <- min(nrow(deppoi),r1+10000-1)
-            dept <- as.numeric(predict(SplineD, deppoi[r1:r2,c("LON","LAT")]))
-            dep_v <- as.data.frame(cbind(deppoi[r1:r2,"rowid"], deppoi[r1:r2,"I_NCEE"], dept))
+        if(length(cur_rows) > 1 & length(cur_cols) > 1){
+          
+          # cat("\n rows: ", length(cur_rows), " - cols:", length(cur_cols), "\n", sep = "")
+          
+          bat_blo <- bat_all[cur_rows, cur_cols]
+          
+          xlon <- rep(as.numeric(rownames(bat_blo)),length(as.numeric(colnames(bat_blo))))
+          ylat <- rep(as.numeric(colnames(bat_blo)),each=length(as.numeric(rownames(bat_blo))))
+          zdep <- as.numeric(bat_blo)
+#           
+#           cat("\n xlon: ", xlon, "\n\n xlat: ", ylat, "\n\n zdep: ", zdep, "\n\n", sep = " ")
+#           
+          ##########
+          blues<-c("lightsteelblue4","lightsteelblue3","lightsteelblue2","lightsteelblue1")
+          ba_bl <- as.bathy(cbind(xlon, ylat, zdep))
+          par(mar = c(1,1,1,1))
+          plot(ba_bl,image=TRUE,land=TRUE,lwd=0.1,bpal=list(c(0,max(zdep),"grey"),c(min(zdep),0,blues)))
+          plot(ba_bl,deep=0,shallow=0,step=0,lwd=0.4,add=TRUE)
+          ##########
+          
+          #         plot(as.bathy(cbind(xlon, ylat, zdep)), image = T)
+          
+          points(deppoi[,"LON"], deppoi[,"LAT"], pch = 20, cex = 0.6, col = "firebrick")
+          
+          cat("  -  Calculating Spline...", sep = "")
+          SplineD <- o_Tps(cbind(xlon, ylat), zdep, lon.lat=TRUE)
+          #         cat(class(SplineD), "\n")
+          rm(bat_blo, zdep, xlon, ylat)
+          
+          cat(" Predicting depth...", sep = "")
+          if(nrow(deppoi)<= 10000){
+            dept <- as.numeric(predict(SplineD, deppoi[,c("LON","LAT")]))
+            dep_v <- as.data.frame(cbind(deppoi[,"rowid"], deppoi[,"I_NCEE"], dept))
             sqldf("insert into p_depth select * from `dep_v`", dbname = the_db)
             rm(dept, dep_v)
             gc()
-          }            
+          }else{
+            nPin <- ceiling(nrow(deppoi)/10000)
+            for(pi in 1:nPin)
+            {
+              cat(".", sep = "")
+              r1 <- 10000*(pi-1)+1
+              r2 <- min(nrow(deppoi),r1+10000-1)
+              dept <- as.numeric(predict(SplineD, deppoi[r1:r2,c("LON","LAT")]))
+              dep_v <- as.data.frame(cbind(deppoi[r1:r2,"rowid"], deppoi[r1:r2,"I_NCEE"], dept))
+              sqldf("insert into p_depth select * from `dep_v`", dbname = the_db)
+              rm(dept, dep_v)
+              gc()
+            }            
+          }
+          cat(" - Completed!  -\n", sep = "")
+          map("world", xlim = the_bbo[2:1], ylim = the_bbo[4:3], col="honeydew3",bg="lightsteelblue1", fill = T)
+          map.axes()
+          
+          xmin_2 <- xmin+((xmax-xmin)/2)
+          abline(v = xmin_2, col = "firebrick")
+          ymin_2 <- ymin+((ymax-ymin)/2)
+          abline(h = ymin_2, col = "firebrick")
+          
+          rect(xmin, ymin, xmin_2, ymin_2, border = "firebrick")
+          rect(xmin_2, ymin, xmax, ymin_2, border = "firebrick")
+          rect(xmin, ymin_2, xmin_2, ymax, border = "firebrick")
+          rect(xmin_2, ymin_2, xmax, ymax, border = "firebrick")
+          
+          rm(SplineD)
+          gc()
+        }else{
+          cat(" outside downloaded bathymetry  -\n", sep = "")
         }
-        cat(" - Completed!  -\n", sep = "")
-        map("world", xlim = the_bbo[2:1], ylim = the_bbo[4:3], bg = "darkorange2", col = "black", fill = T)
-        map.axes()
-        
-        xmin_2 <- xmin+((xmax-xmin)/2)
-        abline(v = xmin_2, col = "firebrick")
-        ymin_2 <- ymin+((ymax-ymin)/2)
-        abline(h = ymin_2, col = "firebrick")
-        
-        rect(xmin, ymin, xmin_2, ymin_2, border = "firebrick")
-        rect(xmin_2, ymin, xmax, ymin_2, border = "firebrick")
-        rect(xmin, ymin_2, xmin_2, ymax, border = "firebrick")
-        rect(xmin_2, ymin_2, xmax, ymax, border = "firebrick")
-        
-        rm(SplineD)
-        gc()
       }else{
         
-        map("world", xlim = the_bbo[2:1], ylim = the_bbo[4:3], bg = "darkorange2", col = "black", fill = T)
+        map("world", xlim = the_bbo[2:1], ylim = the_bbo[4:3], col="honeydew3",bg="lightsteelblue1", fill = T)
         map.axes()
         
         title("\n  -  Splitting Block...")
@@ -394,10 +409,10 @@ merge_source <- function(data_source1, data_source2, rnd_level, minover){
   uS2 <- unique(data_source2[,1])
   nuS2 <- length(uS2)
   
-#   #Set parameters
-#   npmin <- 30
-#   minover <- 30
-#   rnd_level <- 3
+  #   #Set parameters
+  #   npmin <- 30
+  #   minover <- 30
+  #   rnd_level <- 3
   
   #Select the sources with the highest number of vessels
   if(nuS1 < nuS2){
@@ -445,9 +460,9 @@ merge_source <- function(data_source1, data_source2, rnd_level, minover){
         if(length(which(duplicated(round(sub_block_s2$DATE,rnd_level))==TRUE))>0)
           sub_block_s2 <- sub_block_s2[-which(duplicated(round(sub_block_s2$DATE,rnd_level))==TRUE),]    
         inter_blocks_dists <- gmt::geodist(sub_block_s1[,c("LAT")],
-                                      sub_block_s1[,c("LON")],
-                                      sub_block_s2[,c("LAT")],
-                                      sub_block_s2[,c("LON")],units="km")
+                                           sub_block_s1[,c("LON")],
+                                           sub_block_s2[,c("LAT")],
+                                           sub_block_s2[,c("LON")],units="km")
         matd[which(uS1 == uS1[i]),which(uS2 == candidate_ID[j])] <- median(inter_blocks_dists)
       }
     }

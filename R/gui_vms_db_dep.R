@@ -51,7 +51,7 @@ gui_vms_db_dep <- function(vms_db_name = "")
            svalue(sel_vms_f) <- ifelse(.Platform$OS.type == "windows", strsplit(vms_DB$db, "\\\\")[[1]][length(strsplit(vms_DB$db, "\\\\")[[1]])],strsplit(vms_DB$db, "/")[[1]][length(strsplit(vms_DB$db, "/")[[1]])])
            thebo <<- as.numeric(sqldf("select max(LON), min(LON), max(LAT), min(LAT) from intrp", dbname = vms_DB$db))
            
-           maps::map("world", xlim = extendrange(thebo[2:1], f = 0.1), ylim = extendrange(thebo[4:3], f = 0.1), bg = "darkorange2", col = "black", fill = T)
+           maps::map("world", xlim = extendrange(thebo[2:1], f = 0.1), ylim = extendrange(thebo[4:3], f = 0.1), col="honeydew3",bg="lightsteelblue1", fill = T)
            maps::map.axes()
            
            abline(v = thebo[1], col = "firebrick")
@@ -99,7 +99,7 @@ gui_vms_db_dep <- function(vms_db_name = "")
     bbox_lay[1,2] <- ggroup(horizontal = FALSE)
     glabel("Max Lat", container = bbox_lay[1,2])
     ma_la <- gspinbutton(from = -90, to = 90, by = 0.5, value = thebo[3], container = bbox_lay[1,2], handler = function(h,...){
-      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T,col="black", bg = "darkorange2", mar = c(6,6,0,0),
+      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T, col="honeydew3",bg="lightsteelblue1", mar = c(6,6,0,0),
           xlim = extendrange(c(svalue(mi_lo), svalue(ma_lo)), f = 0.05),
           ylim = extendrange(c(svalue(mi_la), svalue(ma_la)), f = 0.05))
       map.axes()
@@ -110,7 +110,7 @@ gui_vms_db_dep <- function(vms_db_name = "")
     bbox_lay[2,1] <- ggroup(horizontal = FALSE)
     glabel("Min Lon", container = bbox_lay[2,1])
     mi_lo <- gspinbutton(from = -180, to = 180, by = 0.5, value = thebo[2], container = bbox_lay[2,1], handler = function(h,...){
-      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T,col="black", bg = "darkorange2", mar = c(6,6,0,0),
+      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T, col="honeydew3",bg="lightsteelblue1", mar = c(6,6,0,0),
           xlim = extendrange(c(svalue(mi_lo), svalue(ma_lo)), f = 0.05),
           ylim = extendrange(c(svalue(mi_la), svalue(ma_la)), f = 0.05))
       map.axes()
@@ -120,7 +120,7 @@ gui_vms_db_dep <- function(vms_db_name = "")
     bbox_lay[2,3] <- ggroup(horizontal = FALSE)
     glabel("Max Lon", container = bbox_lay[2,3])
     ma_lo <- gspinbutton(from = -180, to = 180, by = 0.5, value = thebo[1], container = bbox_lay[2,3], handler = function(h,...){
-      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T,col="black", bg = "darkorange2", mar = c(6,6,0,0),
+      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T, col="honeydew3",bg="lightsteelblue1", mar = c(6,6,0,0),
           xlim = extendrange(c(svalue(mi_lo), svalue(ma_lo)), f = 0.05),
           ylim = extendrange(c(svalue(mi_la), svalue(ma_la)), f = 0.05))
       map.axes()
@@ -130,7 +130,7 @@ gui_vms_db_dep <- function(vms_db_name = "")
     bbox_lay[3,2] <- ggroup(horizontal = FALSE)
     glabel("Min Lat", container = bbox_lay[3,2])
     mi_la <- gspinbutton(from = -90, to = 90, by = 0.5, value = thebo[4], container = bbox_lay[3,2], handler = function(h,...){
-      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T,col="black", bg = "darkorange2", mar = c(6,6,0,0),
+      map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T, col="honeydew3",bg="lightsteelblue1", mar = c(6,6,0,0),
           xlim = extendrange(c(svalue(mi_lo), svalue(ma_lo)), f = 0.05),
           ylim = extendrange(c(svalue(mi_la), svalue(ma_la)), f = 0.05))
       map.axes()
@@ -154,7 +154,7 @@ gui_vms_db_dep <- function(vms_db_name = "")
     
     theplot <- ggraphics(container = bbox_exp, width = 350, height = 200)
     
-    map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T,col="black", bg = "darkorange2", mar = c(6,6,0,0),
+    map(ifelse(((svalue(ma_lo) - svalue(mi_lo)) < 15) | ((svalue(ma_la) - svalue(mi_la)) < 15), "worldHires", "world"),fill=T, col="honeydew3",bg="lightsteelblue1", mar = c(6,6,0,0),
         xlim = extendrange(c(svalue(mi_lo), svalue(ma_lo)), f = 0.05),
         ylim = extendrange(c(svalue(mi_la), svalue(ma_la)), f = 0.05))
     map.axes()

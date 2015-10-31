@@ -9,14 +9,14 @@ import("sqldf")
 import("R6")
 import("ggplot2")
 import("ggmap")
-importFrom("PBSmapping", convUL, findPolys, as.EventData)
+importFrom("PBSmapping", findPolys, as.EventData)
 importFrom("cluster", clara)
 importFrom("ecodist", distance)
 importFrom("marmap", getNOAA.bathy, as.bathy, plot.bathy, palette.bathy)
 importFrom("plotrix", color.scale)
 importFrom("fields", Tps, Krig, Rad.cov, stationary.cov, predict.Krig)
 importFrom("intervals", Intervals, interval_intersection, interval_overlap)
-importFrom("sp", spDistsN1, spDists, over, SpatialPoints)
+importFrom("sp", spDistsN1, spDists, over, SpatialPoints, spTransform, CRS, coordinates)
 importFrom("foreign", read.dbf, write.dbf)
 importFrom("RSQLite", SQLite)
 importFrom("DBI", dbConnect)
@@ -26,6 +26,15 @@ importFrom("chron", chron, dates, times, days, years, scale_x_chron)
 importFrom("maptools", readShapePoly, readShapePoints, SpatialPolygons2PolySet)
 importFrom("outliers", outlier)
 importFrom("grid", grid.draw, grid.newpage)
+importFrom("grDevices", "col2rgb", "dev.off", "extendrange", "jpeg", "rainbow", "rgb")
+importFrom("graphics", "abline", "axis", "barplot", "boxplot",
+     "contour", "hist", "image", "layout", "legend", "lines",
+     "par", "plot", "plot.new", "points", "rect", "text",
+     "title")
+importFrom("stats", "median", "predict", "quantile", "xtabs")
+importFrom("utils", "browseURL", "packageVersion", "read.csv",
+     "read.csv2", "read.table", "write.table")
+
 
 export(gui_main)
 

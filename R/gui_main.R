@@ -370,9 +370,9 @@ gui_main <- function ()
     ab_di <- gbasicdialog(title="VMSBASE About...", do.buttons=FALSE)
     size(ab_di) <- c(750, 400)
     ab_lab <- gtext("
-                                                                                                 ---    VMSbase 1.0    ---
+                                                                               ---    VMSbase  2.1    ---
                     
-                                                                                                      List of Authors 
+                                                                                      List of Authors 
                            =====================================================================
                     
                     VMS BASE represents the implementation of several R routines which have been developed
