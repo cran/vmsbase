@@ -10,7 +10,7 @@ gui_lb_db_edit(lb_db_name = "")
 \item{lb_db_name}{The path of a Logbook DataBase}
 }
 \value{
-This function does not return a value. 
+This function does not return a value.
 After the execution, the Logbook DB will be updated with the edited format.
 }
 \description{
@@ -21,4 +21,3 @@ The \code{gui_lb_db_edit} function implements the graphical user interface for t
 In this gui, with a LogBook Database, the user can automatically edit the logbook
 DB.
 }
-

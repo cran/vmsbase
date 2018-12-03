@@ -11,7 +11,7 @@ gui_out_grid(vms_db_name = "")
 }
 \value{
 This function does not return a value.
- The result count will be plotted on the submitted grid. The user can both save the 
+ The result count will be plotted on the submitted grid. The user can both save the
  result count vector as an r object (necessary for \code{\link{gui_dcf_ind}}),
   or the annotated grid shape file.
 }
@@ -27,4 +27,3 @@ This function, with a VMS DB and a Grid Sea Area Map shape file, computes the to
 \seealso{
 \code{\link{gui_dcf_ind}}
 }
-

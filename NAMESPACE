@@ -30,7 +30,7 @@ importFrom("grDevices", "col2rgb", "dev.off", "extendrange", "jpeg", "rainbow", 
 importFrom("graphics", "abline", "axis", "barplot", "boxplot",
      "contour", "hist", "image", "layout", "legend", "lines",
      "par", "plot", "plot.new", "points", "rect", "text",
-     "title")
+     "title", "segments")
 importFrom("stats", "median", "predict", "quantile", "xtabs")
 importFrom("utils", "browseURL", "packageVersion", "read.csv",
      "read.csv2", "read.table", "write.table")
@@ -67,6 +67,10 @@ export(gui_mark_fis_poi)
 export(gui_out_grid)
 export(gui_vms_met_pred)
 export(Assign_Area)
+export(kno2kmh)
+export(latsex2dec)
+export(lonsex2dec)
+export(rad2deg)
 
 exportClass(vms_File)
 exportClass(vms_DB)

@@ -7,7 +7,7 @@
 gui_vms_db_create()
 }
 \value{
-This function does not return a value. 
+This function does not return a value.
 After the execution a VMS DataBase will be deployed.
 }
 \description{
@@ -21,4 +21,3 @@ This function, with an edited vms dataset (see \code{\link{gui_vms_editraw}}),
 \seealso{
 \code{\link{gui_vms_editraw}}
 }
-

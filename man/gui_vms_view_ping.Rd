@@ -2,10 +2,7 @@
 % Please edit documentation in R/gui_vms_view_ping.R
 \name{gui_vms_view_ping}
 \alias{gui_vms_view_ping}
-\title{VMS DB View Raw Ping Data GUI
- 
-The \code{gui_vms_view_ping} function implements the graphical user interface for the
- VMS DB routine to view raw ping data.}
+\title{VMS DB View Raw Ping Data GUI}
 \usage{
 gui_vms_view_ping(vms_db_name = "", bathy_file_name = "")
 }
@@ -18,10 +15,13 @@ gui_vms_view_ping(vms_db_name = "", bathy_file_name = "")
 This function does not return a value.
 }
 \description{
+The \code{gui_vms_view_ping} function implements the graphical user interface for the
+ VMS DB routine to view raw ping data.
+}
+\details{
 This function, with a VMS database,
  plots vessel data.
 }
 \seealso{
 \code{\link{gui_vms_save_bat}} \code{\link{gui_vms_view_track}} \code{\link{gui_vms_view_intrp}}
 }
-

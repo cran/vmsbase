@@ -2,10 +2,7 @@
 % Please edit documentation in R/gui_vms_save_bat.R
 \name{gui_vms_save_bat}
 \alias{gui_vms_save_bat}
-\title{VMS DB Save Bathymetry GUI
- 
-The \code{gui_vms_save_bat} function implements the graphical user interface for the
- VMS Save Bathymetry routine.}
+\title{VMS DB Save Bathymetry GUI}
 \usage{
 gui_vms_save_bat(vms_db_name = "")
 }
@@ -16,10 +13,13 @@ gui_vms_save_bat(vms_db_name = "")
 This function does not return a value.
 }
 \description{
+The \code{gui_vms_save_bat} function implements the graphical user interface for the
+ VMS Save Bathymetry routine.
+}
+\details{
 This function, with a VMS database,
  downloads an XYZ bathymetry file from NOAA servers.
 }
 \seealso{
 \code{\link{gui_vms_view_ping}} \code{\link{gui_vms_view_track}} \code{\link{gui_vms_view_intrp}}
 }
-
